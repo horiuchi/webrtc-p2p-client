@@ -2,7 +2,7 @@ import { atom, useRecoilValue, useRecoilState, RecoilState } from 'recoil';
 import { useCallback } from 'react';
 import { randomString } from '../utils';
 
-const DefaultWsUrl = 'ws://127.0.0.1:3000/signaling';
+const DefaultWsUrl = 'ws://127.0.0.1:5000/signaling';
 
 const receiveOnlyState = atom({
     key: 'config/receiveOnly',
@@ -22,7 +22,7 @@ export interface Config {
     roomId: string;
     receiveOnly: boolean;
 }
-export function useConfigValues(): Config {
+export function useGetConfigValues(): Config {
     const wsUrl = useRecoilValue(wsUrlState);
     const roomId = useRecoilValue(roomIdState);
     const receiveOnly = useRecoilValue(receiveOnlyState);

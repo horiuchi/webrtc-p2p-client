@@ -1,10 +1,10 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import styled from 'styled-components';
-import { useConfigValues } from 'hooks/config';
+import { useGetConfigValues } from 'hooks/config';
 import { useGetStreams } from 'hooks/streams';
 
 const VideoContainer: React.FC = () => {
-    const { receiveOnly } = useConfigValues();
+    const { receiveOnly } = useGetConfigValues();
     const localVideoRef = useRef<HTMLVideoElement>(null);
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
     const { localStream, remoteStream } = useGetStreams();

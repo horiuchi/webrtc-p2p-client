@@ -15,12 +15,10 @@ export function useGetStreams() {
     return { localStream, remoteStream };
 }
 
-export function useSetLocalStream(stream: MediaStream | null): void {
-    const setStream = useSetRecoilState(localStreamState);
-    setStream(stream);
+export function useSetLocalStream() {
+    return useSetRecoilState(localStreamState);
 }
 
-export function useSetRemoteStream(stream: MediaStream | null): void {
-    const setStream = useSetRecoilState(remoteStreamState);
-    setStream(stream);
+export function useSetRemoteStream() {
+    return useSetRecoilState(remoteStreamState);
 }

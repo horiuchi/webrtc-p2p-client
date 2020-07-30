@@ -7,8 +7,8 @@ const StatusMessages: React.FC = () => {
 
     return (
         <Frame>
-            {messages.map((line) => (
-                <Message>{line}</Message>
+            {messages.map((line, index) => (
+                <Message key={index}>{line}</Message>
             ))}
         </Frame>
     );
