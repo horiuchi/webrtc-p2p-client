@@ -1,15 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import {
-    useConnectWsUrlState,
-    useConnectRoomIdState,
-    useConnectReceiveOnlyState,
-} from 'hooks/config';
+import { useConnectWsUrlState, useConnectRoomIdState } from 'hooks/config';
 
 const ConfigForm: React.FC = () => {
     const [wsUrl, onChangeWsUrl] = useConnectWsUrlState();
     const [roomId, onChangeRoomId] = useConnectRoomIdState();
-    const [receiveOnly, onChangeReceiveOnly] = useConnectReceiveOnlyState();
+    // const [receiveOnly, onChangeReceiveOnly] = useConnectReceiveOnlyState();
 
     return (
         <Inputs>
@@ -31,7 +27,7 @@ const ConfigForm: React.FC = () => {
                     value={roomId}
                 />
             </InputRow>
-            <InputRow>
+            {/* <InputRow>
                 <label htmlFor="receive-only">受信Only:</label>
                 <CheckBox
                     id="receive-only"
@@ -39,7 +35,7 @@ const ConfigForm: React.FC = () => {
                     onChange={onChangeReceiveOnly}
                     checked={receiveOnly}
                 />
-            </InputRow>
+            </InputRow> */}
         </Inputs>
     );
 };
@@ -55,8 +51,8 @@ const TextBox = styled.input`
     width: 12rem;
     margin: 0 0.2rem;
 `;
-const CheckBox = styled.input`
-    margin: 0 0.2rem;
-`;
+// const CheckBox = styled.input`
+//     margin: 0 0.2rem;
+// `;
 
 export default ConfigForm;

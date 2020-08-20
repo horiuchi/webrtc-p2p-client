@@ -8,11 +8,16 @@ const remoteStreamState = atom<MediaStream | null>({
     key: 'streams/remoteStream',
     default: null,
 });
+const dataChannelState = atom<RTCDataChannel | null>({
+    key: 'streams/dataChannel',
+    default: null,
+});
 
 export function useGetStreams() {
     const localStream = useRecoilValue(localStreamState);
     const remoteStream = useRecoilValue(remoteStreamState);
-    return { localStream, remoteStream };
+    const dataChannel = useRecoilValue(dataChannelState);
+    return { localStream, remoteStream, dataChannel };
 }
 
 export function useSetLocalStream() {
@@ -21,4 +26,8 @@ export function useSetLocalStream() {
 
 export function useSetRemoteStream() {
     return useSetRecoilState(remoteStreamState);
+}
+
+export function useSetDataChannel() {
+    return useSetRecoilState(dataChannelState);
 }

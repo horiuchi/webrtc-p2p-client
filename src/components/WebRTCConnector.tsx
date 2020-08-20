@@ -7,11 +7,14 @@ import {
 } from '@open-ayame/ayame-web-sdk';
 import Connection from '@open-ayame/ayame-web-sdk/dist/connection';
 import {
+    useGetStreams,
     useSetLocalStream,
     useSetRemoteStream,
-    useGetStreams,
+    useSetDataChannel,
 } from 'hooks/streams';
 import { useAppendMessage } from 'hooks/messages';
+
+const DataChannelLabel = 'command-channel';
 
 const WebRTCConnector: React.FC = () => {
     const [canConnect, setCanConnect] = useState(true);
@@ -22,6 +25,7 @@ const WebRTCConnector: React.FC = () => {
     const { localStream } = useGetStreams();
     const setLocalStream = useSetLocalStream();
     const setRemoteStream = useSetRemoteStream();
+    const setDataChannel = useSetDataChannel();
     const log = useAppendMessage();
 
     const disconnected = useCallback(() => {
@@ -56,6 +60,9 @@ const WebRTCConnector: React.FC = () => {
         });
         conn.on('open', () => {
             setConnection(conn);
+            conn.createDataChannel(DataChannelLabel, { ordered: false }).then(
+                setDataChannel,
+            );
             log('Connected to signaling server.');
             setCanDisconnect(true);
         });
@@ -75,6 +82,7 @@ const WebRTCConnector: React.FC = () => {
         config.wsUrl,
         disconnected,
         log,
+        setDataChannel,
         setLocalStream,
         setRemoteStream,
     ]);

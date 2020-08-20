@@ -6,7 +6,7 @@ const DefaultWsUrl = 'ws://127.0.0.1:5000/signaling';
 
 const receiveOnlyState = atom({
     key: 'config/receiveOnly',
-    default: false,
+    default: true,
 });
 const wsUrlState = atom({
     key: 'config/wsUrl',
