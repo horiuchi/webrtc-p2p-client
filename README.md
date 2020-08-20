@@ -1,3 +1,3 @@
-# webrtc-p2p-client
+# Android-RC Client
 
-sample project
+This project is the client for Android-RC.
