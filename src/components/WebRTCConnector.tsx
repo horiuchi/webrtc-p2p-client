@@ -14,7 +14,7 @@ import {
 } from 'hooks/streams';
 import { useAppendMessage } from 'hooks/messages';
 
-const DataChannelLabel = 'command-channel';
+const DataChannelLabel = 'android-rc data';
 
 const WebRTCConnector: React.FC = () => {
     const [canConnect, setCanConnect] = useState(true);
@@ -51,6 +51,7 @@ const WebRTCConnector: React.FC = () => {
         const conn = AyameConnection(config.wsUrl, config.roomId, options);
         conn.on('disconnect', () => {
             setRemoteStream(null);
+            setDataChannel(null);
             log('Disconnected.');
             disconnected();
         });
@@ -60,8 +61,11 @@ const WebRTCConnector: React.FC = () => {
         });
         conn.on('open', () => {
             setConnection(conn);
-            conn.createDataChannel(DataChannelLabel, { ordered: false }).then(
-                setDataChannel,
+            conn.createDataChannel(DataChannelLabel, { ordered: true }).then(
+                (dc) => {
+                    setDataChannel(dc);
+                    log(`  Created Data Channel. ${dc != null}`);
+                },
             );
             log('Connected to signaling server.');
             setCanDisconnect(true);

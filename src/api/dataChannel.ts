@@ -1,14 +1,8 @@
-type SendData =
-    | {
-          id: number;
-          type: 'touch';
-          data: TouchEventData[];
-      }
-    | {
-          id: number;
-          type: 'text';
-          data: string;
-      };
+type SendData = {
+    id: number;
+    type: 'touch';
+    data: TouchEventData[];
+};
 
 export interface TouchEventData {
     x: number;
@@ -23,17 +17,6 @@ export function sendTouchEvents(
     sendEvent(channel, {
         id: 0,
         type: 'touch',
-        data,
-    });
-}
-
-export function sendTextEvent(
-    channel: RTCDataChannel | null,
-    data: string,
-): void {
-    sendEvent(channel, {
-        id: 0,
-        type: 'text',
         data,
     });
 }

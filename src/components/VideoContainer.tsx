@@ -3,13 +3,7 @@ import styled, { css } from 'styled-components';
 import { useGetConfigValues } from 'hooks/config';
 import { useGetStreams } from 'hooks/streams';
 import { useArrayState } from '../utils';
-import {
-    sendTouchEvents,
-    TouchEventData,
-    sendTextEvent,
-} from '../api/dataChannel';
-
-const SendTextId = 'send-text';
+import { sendTouchEvents, TouchEventData } from '../api/dataChannel';
 
 const VideoContainer: React.FC = () => {
     const { receiveOnly } = useGetConfigValues();
@@ -79,25 +73,6 @@ const VideoContainer: React.FC = () => {
         [handleTouchEnd, isMousePressed],
     );
 
-    const sendText = useCallback(
-        (e: React.FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-
-            const $text = document.getElementById(
-                SendTextId,
-            ) as HTMLInputElement;
-            if ($text != null) {
-                const value = $text.value;
-                if (value) {
-                    console.log('  Send Text Event', value);
-                    sendTextEvent(dataChannel, value);
-                    $text.value = '';
-                }
-            }
-        },
-        [dataChannel],
-    );
-
     return (
         <Videos shown={remoteStream != null}>
             <RemoteVideo
@@ -107,10 +82,6 @@ const VideoContainer: React.FC = () => {
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseLeave}
             />
-            <form onSubmit={sendText}>
-                <input id={SendTextId} type="text" />
-                <Button type="submit">テキスト送信</Button>
-            </form>
             {!receiveOnly && <LocalVideo ref={localVideoRef} autoPlay muted />}
         </Videos>
     );
@@ -164,9 +135,6 @@ const LocalVideo = styled.video`
     max-height: 30%;
     max-width: 30%;
     transition: opacity 1s;
-`;
-const Button = styled.button`
-    margin-top: 0.5rem;
 `;
 
 export default VideoContainer;
