@@ -1,9 +1,19 @@
-import React, { useRef, useLayoutEffect, useCallback, useState } from 'react';
+import React, {
+    useRef,
+    useLayoutEffect,
+    useCallback,
+    useState,
+    useEffect,
+} from 'react';
 import styled, { css } from 'styled-components';
 import { useGetConfigValues } from 'hooks/config';
 import { useGetStreams } from 'hooks/streams';
 import { useArrayState } from '../utils';
-import { sendTouchEvents, TouchEventData } from '../api/dataChannel';
+import {
+    sendTouchEvents,
+    TouchEventData,
+    sendConfigEvent,
+} from '../api/dataChannel';
 
 const VideoContainer: React.FC = () => {
     const { receiveOnly } = useGetConfigValues();
@@ -24,6 +34,21 @@ const VideoContainer: React.FC = () => {
             remoteVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
+    useEffect(() => {
+        const resizeObserver = new ResizeObserver((entries) => {
+            const width = Math.ceil(entries[0].contentRect.width);
+            const height = Math.ceil(entries[0].contentRect.height);
+
+            console.log(` Send Config Event: height=${height}, width=${width}`);
+            sendConfigEvent(dataChannel, { height, width });
+        });
+
+        remoteVideoRef.current &&
+            resizeObserver.observe(remoteVideoRef.current);
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [dataChannel]);
 
     const handleTouchStart = useCallback(
         (event: TouchEventData) => {
