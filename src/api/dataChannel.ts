@@ -46,9 +46,9 @@ export function sendTouchEvents(
 let id = 1;
 
 function sendEvent(channel: RTCDataChannel | null, data: SendData) {
-    if (channel == null) {
+    if (channel == null || channel.readyState !== 'open') {
         console.warn(
-            'Fail to send event. Because the data channel is null.',
+            'Fail to send event. Because the data channel is null or not opened.',
             data,
         );
         return;

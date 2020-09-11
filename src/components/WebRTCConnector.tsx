@@ -70,6 +70,13 @@ const WebRTCConnector: React.FC = () => {
             log('Connected to signaling server.');
             setCanDisconnect(true);
         });
+        conn.on('connect', () => {
+            log('  Connect P2P Channel.');
+        });
+        conn.on('datachannel', (dc: RTCDataChannel | null) => {
+            setDataChannel(dc);
+            log(`  Receive Data Channel. ${dc != null}`);
+        });
         let localStream: MediaStream | null = null;
         if (!config.receiveOnly) {
             localStream = await navigator.mediaDevices.getUserMedia({
