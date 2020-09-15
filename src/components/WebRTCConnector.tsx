@@ -10,6 +10,7 @@ import {
     useGetStreams,
     useSetLocalStream,
     useSetRemoteStream,
+    useSetAudioRemoteStream,
     useSetDataChannel,
 } from 'hooks/streams';
 import { useAppendMessage } from 'hooks/messages';
@@ -25,6 +26,7 @@ const WebRTCConnector: React.FC = () => {
     const { localStream } = useGetStreams();
     const setLocalStream = useSetLocalStream();
     const setRemoteStream = useSetRemoteStream();
+    const setAudioRemoteStream = useSetAudioRemoteStream();
     const setDataChannel = useSetDataChannel();
     const log = useAppendMessage();
 
@@ -55,9 +57,15 @@ const WebRTCConnector: React.FC = () => {
             log('Disconnected.');
             disconnected();
         });
-        conn.on('addstream', (e: any) => {
-            setRemoteStream(e.stream);
-            log('Connected to remote client.');
+        conn.on('addstream', (e: RTCTrackEvent) => {
+            console.log('addstream', e.track.kind);
+            if (e.track.kind === 'audio') {
+                setAudioRemoteStream(e.streams[0]);
+                log('Connected to remote audio.');
+            } else {
+                setRemoteStream(e.streams[0]);
+                log('Connected to remote client.');
+            }
         });
         conn.on('open', () => {
             setConnection(conn);
@@ -93,6 +101,7 @@ const WebRTCConnector: React.FC = () => {
         config.wsUrl,
         disconnected,
         log,
+        setAudioRemoteStream,
         setDataChannel,
         setLocalStream,
         setRemoteStream,

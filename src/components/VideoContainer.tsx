@@ -19,7 +19,13 @@ const VideoContainer: React.FC = () => {
     const { receiveOnly } = useGetConfigValues();
     const localVideoRef = useRef<HTMLVideoElement>(null);
     const remoteVideoRef = useRef<HTMLVideoElement>(null);
-    const { localStream, remoteStream, dataChannel } = useGetStreams();
+    const remoteAudioRef = useRef<HTMLAudioElement>(null);
+    const {
+        localStream,
+        remoteStream,
+        remoteAudioStream,
+        dataChannel,
+    } = useGetStreams();
 
     const [isMousePressed, setMousePressed] = useState(false);
     const [events, appendEvent, clearEvents] = useArrayState<TouchEventData>();
@@ -34,6 +40,11 @@ const VideoContainer: React.FC = () => {
             remoteVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
+    useLayoutEffect(() => {
+        if (remoteAudioRef.current) {
+            remoteAudioRef.current.srcObject = remoteAudioStream;
+        }
+    }, [remoteAudioStream]);
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {
             const width = Math.ceil(entries[0].contentRect.width);
@@ -107,6 +118,7 @@ const VideoContainer: React.FC = () => {
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseLeave}
             />
+            <audio ref={remoteAudioRef} autoPlay />
             {!receiveOnly && <LocalVideo ref={localVideoRef} autoPlay muted />}
         </Videos>
     );
@@ -145,7 +157,6 @@ const Videos = styled.div<{ shown: boolean }>`
               `}
 `;
 const RemoteVideo = styled.video`
-    flex: 1;
     max-height: 90%;
     max-width: 90%;
     object-fit: contain;
