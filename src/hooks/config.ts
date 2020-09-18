@@ -2,7 +2,8 @@ import { atom, useRecoilValue, useRecoilState, RecoilState } from 'recoil';
 import { useCallback } from 'react';
 import { randomString } from '../utils';
 
-const DefaultWsUrl = 'ws://127.0.0.1:5000/signaling';
+const DefaultWsUrl =
+    'wss://0j1sxcggc0.execute-api.ap-northeast-1.amazonaws.com/Dev';
 
 const receiveOnlyState = atom({
     key: 'config/receiveOnly',
